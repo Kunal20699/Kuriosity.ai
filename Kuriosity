@@ -1,0 +1,100 @@
+#!/usr/bin/env python3
+"""
+=============================================
+🚀 Kuriosity.AI | Neo-Learning Protocol — v0.1
+=============================================
+First 100 lines: futuristic, readable, and ready to extend.
+"""
+
+from __future__ import annotations
+import sys
+import time
+import math
+from typing import Any, Dict, List, Callable
+
+try:
+    from rich.console import Console
+    from rich.table import Table
+except Exception:
+    Console = None  # type: ignore
+
+# ⟁ Core constants — tuned for vibe and clarity
+APP_NAME = "Kuriosity.AI"
+VERSION = "0.1-neon"
+BOOT_SEQUENCE = ["Neural Core", "Knowledge Grid", "Curiosity Engine", "Horizon Interface"]
+
+# ⟁ Utility: slick timestamp
+def timestamp() -> str:
+    return time.strftime("%Y-%m-%dT%H:%M:%S", time.gmtime())
+
+# ⟁ Logger with optional rich flair
+def pulse(msg: str) -> None:
+    t = timestamp()
+    if Console:
+        console = Console()
+        console.log(f"[bold cyan]{t}[/bold cyan] [magenta]»[/magenta] {msg}")
+    else:
+        print(f"{t} » {msg}", file=sys.stdout)
+
+# ⟁ Data structures with futuristic names
+class KnowledgeShard:
+    def __init__(self, id: str, payload: Dict[str, Any]) -> None:
+        self.id = id
+        self.payload = payload
+        self.created_at = timestamp()
+
+    def summarize(self) -> str:
+        keys = ", ".join(list(self.payload.keys())[:3])
+        return f"<Shard {self.id} | keys: {keys} | created: {self.created_at}>"
+
+# ⟁ Simple pipeline stages
+def ingest(source: str) -> KnowledgeShard:
+    pulse(f"Assimilating source: {source}")
+    data = {"source": source, "tokens": len(source.split()), "meta": {"origin": "simulated"}}
+    shard = KnowledgeShard(id=f"shard-{int(time.time()*1000)}", payload=data)
+    pulse(f"Shard created: {shard.id}")
+    return shard
+
+def transform(shard: KnowledgeShard, transform_fn: Callable[[Dict[str, Any]], Dict[str, Any]]) -> KnowledgeShard:
+    pulse(f"Transmuting {shard.id} via transform_fn")
+    new_payload = transform_fn(shard.payload)
+    shard.payload = new_payload
+    pulse(f"{shard.id} transmutation complete")
+    return shard
+
+def present(shard: KnowledgeShard) -> None:
+    pulse(f"Rendering {shard.id} to interface")
+    if Console:
+        console = Console()
+        table = Table(title=f"{APP_NAME} — Shard Preview")
+        table.add_column("Field")
+        table.add_column("Value")
+        for k, v in shard.payload.items():
+            table.add_row(str(k), str(v))
+        console.print(table)
+    else:
+        print("---- Shard ----")
+        for k, v in shard.payload.items():
+            print(f"{k}: {v}")
+
+# ⟁ Small helpers for vibe
+def neon_hash(s: str) -> str:
+    return hex(abs(hash(s)) % (1 << 32))
+
+# ⟁ Example transform function (pluggable)
+def sample_transform(payload: Dict[str, Any]) -> Dict[str, Any]:
+    payload["hash"] = neon_hash(payload.get("source", "") + str(time.time()))
+    payload["readable_tokens"] = max(1, math.ceil(payload.get("tokens", 0) / 2))
+    payload["mood"] = "curious"
+    return payload
+
+# ⟁ Boot sequence orchestration
+def boot_sequence() -> None:
+    pulse(f"{APP_NAME} [{VERSION}] booting...")
+    for step in BOOT_SEQUENCE:
+        pulse(f"Initiating: {step}")
+        time.sleep(0.15)
+    pulse("All systems nominal. Curiosity loop active.")
+
+if __name__ == "__main__":
+    boot_sequence()
